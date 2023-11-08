@@ -1,0 +1,27 @@
+.box1{
+    width: 100px;
+    height: 100px;
+    border: 1px solid black;
+    display: inline-block;
+    font-size: 50px;
+    text-align: center;
+    vertical-align: middle;
+    line-height: 100px;
+    cursor: pointer;
+    border: 2px solid #fff;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    margin: auto;
+}
+.cont{
+    display: flex;
+    flex-wrap: wrap;
+    width: 300px;
+    margin: auto;
+}
+button{
+    margin: 30px;
+}

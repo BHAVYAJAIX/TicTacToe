@@ -1,5 +1,6 @@
+import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
-export default function Inputs({showwinner}) {
+export default function Inputs() {
     const[names, setnames]=useState({name1:"", name2:""});
 
     const changenames=(e)=>{
@@ -13,8 +14,7 @@ export default function Inputs({showwinner}) {
 
         const handlesubmit=(e)=>{
             e.preventDefault();
-            showwinner(names);
-            setnames({name1:"", name2:""});
+            // setnames({name1:"", name2:""});
         }
 
         useEffect(()=>{
@@ -30,7 +30,7 @@ export default function Inputs({showwinner}) {
                 <label htmlFor="name2">Whose playing as O? </label>
                 <input type="text" placeholder="Player 2" value={names.name2} onChange={changenames} id="name2"/>
                 <br/>
-                <Link to="/gameboard">Submit</Link>
+                <Link to='/gameboard'>Submit</Link>
             </form>
         </div>
     );

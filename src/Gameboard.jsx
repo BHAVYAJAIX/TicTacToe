@@ -1,15 +1,18 @@
 import "./gameboard.css";
 import { useState, useEffect} from 'react';
 import Boxes from "./boxes";
-import Inputs from "./inputs"
 
 export default function Gameboard() {
     const [fills, setfills]=useState([]);
     const [clickno, setclickno] = useState(true);
     const [letter, setletter] = useState(Array(9).fill(null));
     const [winner, setWinner] = useState(null);
-    const [recdnames, setrecdnames] = useState({name1:"X", name2:"O"});
+    const [recdnames, setrecdnames] = useState({name1:"", name2:""});
     const [winordraw, setwinordraw] = useState(false);
+
+    useEffect(() => {
+        getnames();
+    }, []);
 
     useEffect(() => {
         iswin(recdnames);
@@ -81,9 +84,6 @@ export default function Gameboard() {
         return false;
       }
 
-      const showwinner=(recdnames)=>{
-            setrecdnames(recdnames);
-          }
 
     function checkwindraw(){
         console.log(winner)
@@ -92,20 +92,26 @@ export default function Gameboard() {
         }
     }
 
+    function getnames(){
+        const recdnames=JSON.parse(localStorage.getItem("names"));
+        if(recdnames){
+            setrecdnames(recdnames);
+        }
+    }
+
     return (
         <div className="allcont">
-            <h1>Play now!</h1>
-            <Inputs showwinner={showwinner}/>
+            <h1>Fight!</h1>
             <div className="cont">
                 {letter.map((l, id) => (
                     <div key={id}>
-                        <Boxes inp={() => select(id)} letter={l} />
+                        <Boxes key={l} inp={() => select(id)} letter={l} />
                     </div>
                 ))}
             </div>
-            {winordraw && (winner? <h2>Winner is {winner}</h2> : <h2>DRAW</h2>)}
+            {winordraw && (winner? <h2>{winner} wins!</h2> : <h2>DRAW</h2>)}
             <button onClick={resetfxn}>Reset</button>
-            <button onClick={undofxn} disabled={fills.length===0 || winner}>Undo</button>
+            <button onClick={undofxn} disabled={fills.length===0 || winordraw}>Undo</button>
         </div>
     );
 }

@@ -7,6 +7,7 @@ export default function Gameboard() {
     const [clickno, setclickno] = useState(true);
     const [letter, setletter] = useState(Array(9).fill(null));
     const [winner, setWinner] = useState(null);
+    const [winnerbox, setWinnerbox] = useState([]);
     const [recdnames, setrecdnames] = useState({name1:"", name2:""});
     const [winordraw, setwinordraw] = useState(false);
 
@@ -48,6 +49,7 @@ export default function Gameboard() {
         setwinordraw(false);
         setWinner(null);
         setclickno(true);
+        setWinnerbox([]);
     }
 
     function undofxn(){
@@ -71,13 +73,15 @@ export default function Gameboard() {
           [0, 4, 8], [6, 4, 2]
         ];
         for (let i = 0; i < winpos.length; i++) {
-          const [a, b, c] = winpos[i];
-          if (letter[a]==='X' && letter[a] === letter[b] && letter[a] === letter[c]) {
+          const temp = winpos[i];
+          if (letter[temp[0]]==='X' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
             setWinner(recdnames.name1);
+            setWinnerbox(temp)
             return true;
-          }
-          else if (letter[a]==='O' && letter[a] === letter[b] && letter[a] === letter[c]) {
+        }
+        else if (letter[temp[0]]==='O' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
             setWinner(recdnames.name2);
+            setWinnerbox(temp)
             return true;
           }
         }
@@ -105,11 +109,11 @@ export default function Gameboard() {
             <div className="cont">
                 {letter.map((l, id) => (
                     <div key={id}>
-                        <Boxes key={l} inp={() => select(id)} letter={l} />
+                        <Boxes key={l} boxno={id} inp={() => select(id)} letter={l} winbox={winnerbox}/>
                     </div>
                 ))}
             </div>
-            {winordraw && (winner? <h2>{winner} wins!</h2> : <h2>DRAW</h2>)}
+            {winordraw ? (winner ? <h2 key={winner} className="mainh2 sup">{winner} wins!</h2> : <h2 key="draw" className="mainh2 sup">DRAW</h2>):<h2 key="blank" className="mainh2"></h2>}
             <button onClick={resetfxn}>Reset</button>
             <button onClick={undofxn} disabled={fills.length===0 || winordraw}>Undo</button>
         </div>

@@ -11,6 +11,7 @@ export default function Gameboard() {
     const [winordraw, setwinordraw] = useState(false);
     const [alternates, setalternates] = useState(true)
     const [turn, setturn] = useState(false);
+    const [Winnerbox, setWinnerbox]=useState([]);
     const firstUpdate = useRef(true);
 
     useEffect(() => {
@@ -160,13 +161,26 @@ export default function Gameboard() {
         }
     }
 
-    function maxindarr(arr){
+    function maxindarr(arr, mainarr){
         let max=arr[0];
         let maxind=0;
         for(let i=0;i<arr.length;i++){
             if(max<arr[i]){
             max=arr[i];
             maxind=i;
+            }
+        }
+        for(let i=0;i<mainarr.length;i++){
+            if(arr[i]===max){
+                var out;
+                out=mainarr[i]
+                for(let l=0; l<9;l++){
+                    if(lettercomp[l]!==out[l]){
+                        if(l===0||l===2||l===4||l===6||l===8){
+                            return i;
+                        }
+                    }   
+                }
             }
         }
         return maxind;
@@ -193,7 +207,7 @@ export default function Gameboard() {
             let i = minimax(x)
             vals.push(i)
         }
-        let maxIndex = maxindarr(vals)
+        let maxIndex = maxindarr(vals, te)
         var out;
         out = te[maxIndex]
         console.log(out);
@@ -220,6 +234,7 @@ export default function Gameboard() {
     }
 
     function resetfxn() {
+        setWinnerbox([]);
         setletter(Array(9).fill(null));
         setlettercomp(Array(9).fill(null));
         fills.length = 0;
@@ -237,7 +252,7 @@ export default function Gameboard() {
         fills.pop();
     }
 
-    function iswin(recdnames) {
+    function iswin() {
         if (winner !== null) {
             return;
         }
@@ -247,22 +262,26 @@ export default function Gameboard() {
             [0, 4, 8], [6, 4, 2]
         ];
         for (let i = 0; i < winpos.length; i++) {
-            const [a, b, c] = winpos[i];
-            if (letter[a] === 'X' && letter[a] === letter[b] && letter[a] === letter[c]) {
+            const temp = winpos[i];
+          if (letter[temp[0]]==='X' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
+            setWinner('X');
+            setWinnerbox(temp)
+            return true;
+        }
+            else if (lettercomp[temp[0]]==='X' && lettercomp[temp[0]] === lettercomp[temp[1]] && lettercomp[temp[0]] === lettercomp[temp[2]]) {
                 setWinner('X');
+                setalternates(true);
+                setWinnerbox(temp)
                 return true;
             }
-            else if (lettercomp[a] === 'X' && lettercomp[a] === lettercomp[b] && lettercomp[a] === lettercomp[c]) {
-                setWinner('X');
-                setalternates(true) 
-                return true;
-            }
-            else if (lettercomp[a] === 'O' && lettercomp[a] === lettercomp[b] && lettercomp[a] === lettercomp[c]) {
+            else if (letter[temp[0]]==='O' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
                 setWinner('O');
+                setWinnerbox(temp)
                 return true;
             }
-            else if (letter[a] === 'O' && letter[a] === letter[b] && letter[a] === letter[c]) {
+            else if (lettercomp[temp[0]]==='O' && lettercomp[temp[0]] === lettercomp[temp[1]] && lettercomp[temp[0]] === lettercomp[temp[2]]) {
                 setWinner('O');
+                setWinnerbox(temp)
                 return true;
             }
         }
@@ -279,24 +298,22 @@ export default function Gameboard() {
     return (
         <div className="allcont">
             <h1>Fight!</h1>
-            <label htmlFor="first">Computer play first</label>
-            <input type="radio" name="first" onChange={decideturn}></input>
             <div className="cont">
             {alternates ?
                     letter.map((l, id) => (
-                        <div key={id} className="box2">
-                            <Boxes key={l} inp={() => select(id)} letter={l} />
+                        <div key={id}>
+                            <Boxes key={l} boxno={id} inp={() => select(id)} letter={l} winbox={Winnerbox}/>
                         </div>
                     ))
                     :
                     lettercomp.map((l, id) => (
-                        <div key={id} className="box2">
-                            <Boxes key={l} inp={() => select(id)} letter={l} />
+                        <div key={id}>
+                            <Boxes key={l} boxno={id} inp={() => select(id)} letter={l} winbox={Winnerbox}/>
                         </div>
                     ))
                 }
             </div>
-            {winordraw && (winner ? <h2>{winner} wins!</h2> : <h2>DRAW</h2>)}
+            {winordraw ? (winner ? <h2 key={winner} className="mainh2 sup">{winner} wins!</h2> : <h2 key="draw" className="mainh2 sup">DRAW</h2>):<h2 key="blank" className="mainh2"></h2>}
             <button onClick={resetfxn}>Reset</button>
             <button onClick={undofxn} disabled={fills.length === 0 || winordraw}>Undo</button>
         </div>

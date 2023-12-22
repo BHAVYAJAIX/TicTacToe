@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState,useEffect } from "react";
+import "./options.css"
 export default function Inputs() {
     const[names, setnames]=useState({name1:"", name2:""});
 
@@ -22,15 +23,16 @@ export default function Inputs() {
         },[names])
     return (
         <div>
+            <h2 className="auxh2">Enter your names:</h2>
             <form onSubmit={handlesubmit}>
-                <label htmlFor="name1">Whose playing as X? </label>
-                <input type="text" placeholder="Player 1" value={names.name1} onChange={changenames} id="name1"/>
+                <label htmlFor="name1">Who plays first? </label>
+                <input type="text" placeholder="Enter name" value={names.name1} onChange={changenames} id="name1" className="auxinput"/>
                 <br/>
                 <br/>
-                <label htmlFor="name2">Whose playing as O? </label>
-                <input type="text" placeholder="Player 2" value={names.name2} onChange={changenames} id="name2"/>
+                <label htmlFor="name2">Playing second? </label>
+                <input type="text" placeholder="Enter name" value={names.name2} onChange={changenames} id="name2" className="auxinput"/>
                 <br/>
-                <Link to='/gameboard'>Submit</Link>
+                <Link to='/gameboard' className="button second">Submit</Link>
             </form>
         </div>
     );

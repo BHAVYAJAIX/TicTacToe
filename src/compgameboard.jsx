@@ -10,7 +10,8 @@ export default function Gameboard() {
     const [winner, setWinner] = useState(null);
     const [winordraw, setwinordraw] = useState(false);
     const [turn, setturn] = useState(false);
-    const [alternates, setalternates] = useState(true)
+    const [alternates, setalternates] = useState(true);
+    const [Winnerbox, setWinnerbox]=useState([]);
     const firstUpdate = useRef(true);
 
     useEffect(() => {
@@ -106,6 +107,7 @@ export default function Gameboard() {
     }
 
     function resetfxn() {
+        setWinnerbox([]);
         setalternates(false)
         setlettercomp(Array(9).fill(null));
         fills.length = 0;
@@ -134,23 +136,26 @@ export default function Gameboard() {
             [0, 4, 8], [6, 4, 2]
         ];
         for (let i = 0; i < winpos.length; i++) {
-            const [a, b, c] = winpos[i];
-            if (letter[a] === 'X' && letter[a] === letter[b] && letter[a] === letter[c]) {
+            const temp = winpos[i];
+          if (letter[temp[0]]==='X' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
+            setWinner('X');
+            setWinnerbox(temp)
+            return true;
+        }
+            else if (letter[temp[0]]==='X' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
                 setWinner('X');
-                setalternates(true)
+                setalternates(true);
+                setWinnerbox(temp)
                 return true;
             }
-            else if (lettercomp[a] === 'X' && lettercomp[a] === lettercomp[b] && lettercomp[a] === lettercomp[c]) {
-                setWinner('X');
-                setalternates(true) 
-                return true;
-            }
-            else if (lettercomp[a] === 'O' && lettercomp[a] === lettercomp[b] && lettercomp[a] === lettercomp[c]) {
+            else if (letter[temp[0]]==='O' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
                 setWinner('O');
+                setWinnerbox(temp)
                 return true;
             }
-            else if (letter[a] === 'O' && letter[a] === letter[b] && letter[a] === letter[c]) {
+            else if (letter[temp[0]]==='O' && letter[temp[0]] === letter[temp[1]] && letter[temp[0]] === letter[temp[2]]) {
                 setWinner('O');
+                setWinnerbox(temp)
                 return true;
             }
         }
@@ -177,18 +182,18 @@ export default function Gameboard() {
                 {alternates ?
                     letter.map((l, id) => (
                         <div key={id}>
-                            <Boxes key={l} inp={() => select(id)} letter={l} />
+                            <Boxes key={l} boxno={id} inp={() => select(id)} letter={l} winbox={Winnerbox}/>
                         </div>
                     ))
                     :
                     lettercomp.map((l, id) => (
                         <div key={id}>
-                            <Boxes key={l} inp={() => select(id)} letter={l} />
+                            <Boxes key={l} boxno={id} inp={() => select(id)} letter={l} winbox={Winnerbox}/>
                         </div>
                     ))
                 }
             </div>
-            {winordraw && (winner ? <h2>{winner} wins!</h2> : <h2>DRAW</h2>)}
+            {winordraw ? (winner ? <h2 key={winner} className="mainh2 sup">{winner} wins!</h2> : <h2 key="draw" className="mainh2 sup">DRAW</h2>):<h2 key="blank" className="mainh2"></h2>}
             <button onClick={resetfxn}>Reset</button>
             <button onClick={undofxn} disabled={fills.length === 0 || winordraw}>Undo</button>
         </div>

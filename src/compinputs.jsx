@@ -7,12 +7,12 @@ const Compinputs = () => {
     <h2 className='auxh2'>Choose your difficulty level:</h2>
     <div className='container2'>
       <div>
-    <Link to='/compgameboard' className='button second'>Easy</Link>
+    <Link to='/compinputs/compgameboard' className='button second'>Easy</Link>
       </div>
     <br/>
     <br/>
     <div>
-    <Link to='/smartcompgameboard' className='button second'>Unbeatable</Link>
+    <Link to='/compinputs/smartcompgameboard' className='button second'>Unbeatable</Link>
     </div>
     </div>
     </>

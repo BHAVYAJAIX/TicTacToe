@@ -32,7 +32,7 @@ export default function Inputs() {
                 <label htmlFor="name2">Playing second? </label>
                 <input type="text" placeholder="Enter name" value={names.name2} onChange={changenames} id="name2" className="auxinput"/>
                 <br/>
-                <Link to='/gameboard' className="button second">Submit</Link>
+                <Link to='/inputs/gameboard' className="button second">Submit</Link>
             </form>
         </div>
     );

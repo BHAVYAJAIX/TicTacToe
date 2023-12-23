@@ -1,6 +1,5 @@
 import React from 'react';
 import "./gameboard.css";
-import{useState, useEffect} from 'react'
 export default function Boxes({ boxno, inp, letter, winbox }) {
   console.log(winbox)
   return (

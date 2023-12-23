@@ -15,7 +15,7 @@ function App() {
       <Route path='/inputs/gameboard' element={<Gameboard/>}/>
       <Route path='/compinputs' element={<Compinputs/>}/>
       <Route path='/compinputs/compgameboard' element={<Compgameboard/>}/>
-      <Route path='/compiputs/smartcompgameboard' element={<Smartcompgameboard/>}/>
+      <Route path='/compinputs/smartcompgameboard' element={<Smartcompgameboard/>}/>
     </Routes>
     </Router>
 }
